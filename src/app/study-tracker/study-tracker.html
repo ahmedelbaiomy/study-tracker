@@ -1,0 +1,89 @@
+<div class="wrap">
+
+  <div class="top-bar">
+    <div class="title-row">
+      <div class="title-icon"><i class="ti ti-calendar-check"></i></div>
+      <span class="title-text">تراكر المذاكرة</span>
+    </div>
+    <div class="week-nav">
+      <button (click)="changeWeek(-1)" [disabled]="isPrevDisabled()">&#8249;</button>
+      <span class="week-label">{{ weekLabel() }}</span>
+      <button (click)="changeWeek(1)">&#8250;</button>
+    </div>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-label">أيام مكتملة هذا الأسبوع</div>
+      <div class="stat-val">{{ weekDone() }} <span>/ 7</span></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">إجمالي الأيام</div>
+      <div class="stat-val">{{ stats().total }}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">أطول streak</div>
+      <div class="stat-val">{{ stats().streak }} <span>يوم</span></div>
+    </div>
+  </div>
+
+  <div class="daily-section">
+    <div class="daily-title">ثابت كل يوم — 1:45 ساعة</div>
+    @for (item of dailyFixed; track item.label) {
+      <div class="daily-row">
+        <span class="pill" [class]="item.pill">{{ item.label }}</span>
+        <span class="daily-name">{{ item.name }}</span>
+        <span class="daily-time">{{ item.time }}</span>
+      </div>
+    }
+  </div>
+
+  <div class="day-grid">
+    @for (day of weekDays(); track day.dayIndex) {
+      <div class="day-col" [class.done]="day.done" [class.today]="day.isToday">
+        <div class="day-header">{{ day.dayName }}</div>
+        <div class="day-date">{{ day.dateLabel }}</div>
+        <div class="sessions">
+          @for (session of day.sessions; track session.label) {
+            <div class="session">
+              <span class="pill" [class]="session.pill">{{ session.label }}</span>
+              <span class="time-label">{{ session.time }}</span>
+            </div>
+          }
+        </div>
+
+        @if (!day.locked) {
+          <button class="check-btn" (click)="toggle(day.dayIndex)">
+            @if (day.done) {
+              <i class="ti ti-check"></i> مكتمل
+            } @else {
+              <i class="ti ti-circle"></i> سجّل
+            }
+          </button>
+        } @else {
+          <div class="check-btn" style="cursor:default;opacity:.4">
+            <i class="ti ti-lock"></i>
+          </div>
+        }
+      </div>
+    }
+  </div>
+
+  <div class="legend-row">
+    <div class="legend-item">
+      <div class="legend-dot" style="background:#9FE1CB;border:0.5px solid #1D9E75"></div>يوم مكتمل
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot" style="background:#E6F1FB;border:1.5px solid #378ADD"></div>اليوم
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot" style="background:var(--bg2);border:0.5px solid var(--border1)"></div>لسه
+    </div>
+    <button class="reset-btn" (click)="resetAll()">
+      <i class="ti ti-trash" style="font-size:12px"></i> مسح الكل
+    </button>
+  </div>
+
+</div>
+
+<div class="footer">powered by <strong>Ahmed Elbaiomy</strong></div>
